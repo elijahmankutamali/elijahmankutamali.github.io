@@ -209,6 +209,7 @@ h3 {
 .fact span {
   color: var(--muted);
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .grid {
@@ -223,11 +224,26 @@ h3 {
   border: 1px solid #e0e6ee;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(16,43,80,0.05);
+  overflow-wrap: anywhere;
 }
 
 .tile p {
   color: var(--muted);
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.tile img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.tile a {
+  color: var(--blue);
+  font-weight: bold;
 }
 
 .badge {
@@ -280,6 +296,12 @@ h3 {
 
 .contact-box a:not(.button) {
   color: var(--gold);
+}
+
+.loading-message,
+.empty-message {
+  color: var(--muted);
+  padding: 15px 0;
 }
 
 footer {
@@ -336,6 +358,9 @@ footer {
       <a href="#leadership">Leadership</a>
       <a href="#experience">Experience</a>
       <a href="#achievements">Achievements</a>
+      <a href="#events">Events</a>
+      <a href="#news">News</a>
+      <a href="#blog">Personal Blog</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -349,7 +374,7 @@ footer {
     <div>
       <div class="eyebrow">Personal Portfolio · Ghana</div>
 
-      <h1 id="hero-name">Elijah<br>Mankutam Ali</h1>
+      <h1 id="hero-name">Elijah Mankutam Ali</h1>
 
       <p class="roles" id="hero-title">
         Educator · Communicator · Civil Activist · Student Leader · Wikimedian
@@ -374,11 +399,10 @@ footer {
         id="profile-photo"
         src="https://i.ibb.co/hFYRdGmT/IMG-20260718-WA0069-2.jpg"
         alt="Portrait of Elijah Mankutam Ali"
-        onerror="this.style.display='none'; document.getElementById('photo-error').style.display='block';"
       >
 
       <p id="photo-error" style="display:none;text-align:center;">
-        Photograph unavailable. Please check the image link.
+        Photograph unavailable. Please check the image link in Pages CMS.
       </p>
 
       <p class="photo-caption">Official Profile Photograph</p>
@@ -474,9 +498,7 @@ footer {
 
       <article class="tile">
         <h3>Nalerigu Senior High School</h3>
-        <p>
-          Senior high school education in the North East Region of Ghana.
-        </p>
+        <p>Senior high school education in the North East Region of Ghana.</p>
       </article>
 
       <article class="tile">
@@ -553,18 +575,15 @@ footer {
 
       <div class="timeline-item">
         <h3>Teaching Experience</h3>
-        <p>
-          Private school teacher at Sunesis Vine Montessori Basic
-          School, Nalerigu.
-        </p>
+        <p>Private school teacher at Sunesis Vine Montessori Basic School, Nalerigu.</p>
       </div>
 
       <div class="timeline-item">
         <h3>Christian Ministry</h3>
         <p>
-          Lay pastor at Rock of Help Assemblies of God Church,
-          Nalerigu, and Sunday school teacher at House of Prayer
-          Assemblies of God Church, Nalerigu.
+          Lay pastor at Rock of Help Assemblies of God Church, Nalerigu,
+          and Sunday school teacher at House of Prayer Assemblies of God
+          Church, Nalerigu.
         </p>
       </div>
 
@@ -601,6 +620,45 @@ footer {
   </div>
 </section>
 
+<section class="light-section" id="events">
+  <div class="container">
+    <div class="eyebrow">What's Happening</div>
+    <h2>Events</h2>
+    <p class="section-intro">
+      Events, programmes and activities.
+    </p>
+    <div class="grid" id="events-list">
+      <p class="loading-message">Loading events…</p>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="container">
+    <div class="eyebrow">Latest Updates</div>
+    <h2>News and Updates</h2>
+    <p class="section-intro">
+      News, announcements and updates.
+    </p>
+    <div class="grid" id="news-list">
+      <p class="loading-message">Loading news…</p>
+    </div>
+  </div>
+</section>
+
+<section class="light-section" id="blog">
+  <div class="container">
+    <div class="eyebrow">Reflections and Stories</div>
+    <h2>Personal Blog</h2>
+    <p class="section-intro">
+      Thoughts, experiences, lessons and reflections.
+    </p>
+    <div class="grid" id="blog-list">
+      <p class="loading-message">Loading blog posts…</p>
+    </div>
+  </div>
+</section>
+
 <section id="contact">
   <div class="container">
 
@@ -614,8 +672,7 @@ footer {
 
       <p>
         Email:
-        <a id="contact-email"
-           href="mailto:aelijahmankutam@gmail.com">
+        <a id="contact-email" href="mailto:aelijahmankutam@gmail.com">
           aelijahmankutam@gmail.com
         </a>
       </p>
@@ -642,27 +699,29 @@ footer {
 </footer>
 
 <script>
-(async function () {
+(function () {
   'use strict';
 
-  function getText(value) {
+  const OWNER = 'elijahmankutamali';
+  const REPO = 'elijahmankutamali.github.io';
+  const BRANCH = 'main';
+
+  function textValue(value) {
     if (value === null || value === undefined) return '';
+
     if (typeof value === 'string') return value.trim();
 
     if (Array.isArray(value)) {
-      return value.map(function (item) {
-        if (typeof item === 'string') return item;
-        if (item && typeof item === 'object') {
-          return Object.values(item).filter(Boolean).join(' — ');
-        }
-        return String(item);
-      }).filter(Boolean).join('\n\n');
+      return value.map(textValue).filter(Boolean).join('\n\n');
     }
 
     if (typeof value === 'object') {
-      return Object.entries(value).map(function (entry) {
-        return entry[0] + ': ' + entry[1];
-      }).join('\n\n');
+      return Object.entries(value)
+        .map(function (entry) {
+          return entry[0] + ': ' + textValue(entry[1]);
+        })
+        .filter(Boolean)
+        .join('\n\n');
     }
 
     return String(value);
@@ -670,181 +729,567 @@ footer {
 
   function setText(id, value) {
     const element = document.getElementById(id);
-    const text = getText(value);
+    const valueText = textValue(value);
 
-    if (element && text) {
-      element.textContent = text;
+    if (element && valueText) {
+      element.textContent = valueText;
     }
   }
 
-  function setParagraphs(element, value) {
-    const text = getText(value);
+  function makeParagraphs(element, value) {
+    if (!element) return;
 
-    if (!element || !text) return;
+    const content = textValue(value);
+    if (!content) return;
 
     element.replaceChildren();
 
-    text.split(/\n\s*\n/).forEach(function (part) {
+    content.split(/\n\s*\n/).forEach(function (part) {
       const paragraph = document.createElement('p');
       paragraph.textContent = part.trim();
+
       if (paragraph.textContent) {
         element.appendChild(paragraph);
       }
     });
   }
 
-  function setCardContent(id, title, value) {
-    const container = document.getElementById(id);
-    const text = getText(value);
+  function makeTiles(element, entries) {
+    if (!element || !entries.length) return;
 
-    if (!container || !text) return;
+    element.replaceChildren();
 
-    container.replaceChildren();
+    entries.forEach(function (entry) {
+      const tile = document.createElement('article');
+      tile.className = 'tile';
 
+      const heading = document.createElement('h3');
+      heading.textContent = entry.title;
+      tile.appendChild(heading);
+
+      if (entry.description) {
+        const paragraph = document.createElement('p');
+        paragraph.textContent = entry.description;
+        tile.appendChild(paragraph);
+      }
+
+      element.appendChild(tile);
+    });
+  }
+
+  function splitEducation(value) {
+    const text = textValue(value);
+
+    const schoolNames = [
+      'Enchi College of Education',
+      'Nalerigu Senior High School',
+      'Binde Junior High School',
+      'Binde D/A Primary School'
+    ];
+
+    const positions = schoolNames
+      .map(function (name) {
+        return {
+          name: name,
+          position: text.indexOf(name)
+        };
+      })
+      .filter(function (item) {
+        return item.position >= 0;
+      })
+      .sort(function (a, b) {
+        return a.position - b.position;
+      });
+
+    if (!positions.length) {
+      return [{
+        title: 'Education and Academic Background',
+        description: text
+      }];
+    }
+
+    return positions.map(function (item, index) {
+      const start = item.position;
+      const end = index + 1 < positions.length
+        ? positions[index + 1].position
+        : text.length;
+
+      let details = text.slice(start + item.name.length, end);
+      details = details.replace(/^[\s:;,.–—-]+/, '');
+      details = details.replace(/[\s;,.]+$/, '');
+
+      return {
+        title: item.name,
+        description: details || 'Education details'
+      };
+    });
+  }
+
+  function splitNumberedList(value) {
+    const text = textValue(value);
+
+    const lines = text.split(/\n/).map(function (line) {
+      return line.trim();
+    }).filter(Boolean);
+
+    const entries = lines.map(function (line) {
+      return line.replace(/^\d+[\.\)]\s*/, '');
+    }).filter(Boolean);
+
+    if (entries.length <= 1) {
+      return text.split(/\n\s*\n/).map(function (part) {
+        return {
+          title: 'Leadership and Public Service',
+          description: part.trim()
+        };
+      }).filter(function (entry) {
+        return entry.description;
+      });
+    }
+
+    return entries.map(function (entry) {
+      const separator = entry.indexOf(':');
+
+      if (separator > 0 && separator < 80) {
+        return {
+          title: entry.slice(0, separator).trim(),
+          description: entry.slice(separator + 1).trim()
+        };
+      }
+
+      return {
+        title: 'Leadership Appointment',
+        description: entry
+      };
+    });
+  }
+
+  function splitExperience(value) {
+    const text = textValue(value);
+
+    return text.split(/\n\s*\n/).map(function (part) {
+      const item = part.trim();
+      const separator = item.indexOf(':');
+
+      if (separator > 0 && separator < 80) {
+        return {
+          title: item.slice(0, separator).trim(),
+          description: item.slice(separator + 1).trim()
+        };
+      }
+
+      return {
+        title: 'Experience and Service',
+        description: item
+      };
+    }).filter(function (entry) {
+      return entry.description;
+    });
+  }
+
+  function resolveImage(path) {
+    const value = textValue(path);
+    if (!value) return '';
+
+    try {
+      return new URL(value, window.location.origin).href;
+    } catch (error) {
+      return '';
+    }
+  }
+
+  async function loadWebsiteInformation() {
+    try {
+      const response = await fetch('./content/site.json', {
+        cache: 'no-store'
+      });
+
+      if (!response.ok) {
+        throw new Error('Could not load content/site.json');
+      }
+
+      const data = await response.json();
+
+      const name = textValue(data.name);
+      const title = textValue(data.title);
+      const biography = textValue(data.biography);
+      const education = textValue(data.education);
+      const leadership = textValue(data.leadership);
+      const experience = textValue(data.experience);
+      const achievements = textValue(data.achievements);
+      const photo = textValue(data.photo);
+      const email = textValue(data.email);
+
+      if (name) {
+        document.title = name + ' | Personal Website';
+        setText('brand-name', name.toUpperCase());
+        setText('hero-name', name);
+
+        document.getElementById('profile-photo').alt =
+          'Portrait of ' + name;
+      }
+
+      if (title) {
+        setText('hero-title', title);
+      }
+
+      if (biography) {
+        makeParagraphs(
+          document.getElementById('biography-content'),
+          biography
+        );
+      }
+
+      if (education) {
+        makeTiles(
+          document.getElementById('education-content'),
+          splitEducation(education)
+        );
+
+        const institution = education.match(
+          /Enchi College of Education/i
+        );
+
+        if (institution) {
+          setText('institution', 'Enchi College of Education');
+        }
+
+        const programme = education.match(
+          /Bachelor of Education[\s\S]*?(?=Nalerigu Senior High School|Binde Junior High School|Binde D\/A Primary School|$)/i
+        );
+
+        if (programme) {
+          setText('programme', programme[0].trim());
+        }
+
+        const graduation = education.match(
+          /(?:expected\s+(?:graduation|completion)|expected to graduate)[\s:–-]*(?:in\s+)?(\d{4})/i
+        );
+
+        if (graduation) {
+          setText('graduation', graduation[1]);
+        }
+      }
+
+      if (leadership) {
+        makeTiles(
+          document.getElementById('leadership-content'),
+          splitNumberedList(leadership)
+        );
+      }
+
+      if (experience) {
+        const container = document.getElementById('experience-content');
+        container.replaceChildren();
+
+        splitExperience(experience).forEach(function (entry) {
+          const item = document.createElement('div');
+          item.className = 'timeline-item';
+
+          const heading = document.createElement('h3');
+          heading.textContent = entry.title;
+
+          const paragraph = document.createElement('p');
+          paragraph.textContent = entry.description;
+
+          item.appendChild(heading);
+          item.appendChild(paragraph);
+          container.appendChild(item);
+        });
+      }
+
+      if (achievements) {
+        makeParagraphs(
+          document.getElementById('achievements-content'),
+          achievements
+        );
+      }
+
+      if (photo) {
+        const image = document.getElementById('profile-photo');
+        image.src = resolveImage(photo);
+        image.style.display = 'block';
+
+        image.onerror = function () {
+          image.style.display = 'none';
+          document.getElementById('photo-error').style.display = 'block';
+        };
+
+        image.onload = function () {
+          image.style.display = 'block';
+          document.getElementById('photo-error').style.display = 'none';
+        };
+      }
+
+      if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        const link = document.getElementById('contact-email');
+
+        link.textContent = email;
+        link.href = 'mailto:' + email;
+
+        document.getElementById('email-button').href =
+          'mailto:' + email;
+      }
+
+    } catch (error) {
+      console.error('Website information could not be loaded:', error);
+    }
+  }
+
+  function parseFrontMatter(markdown) {
+    const match = markdown.match(
+      /^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n([\s\S]*))?$/
+    );
+
+    if (!match) {
+      return {};
+    }
+
+    const header = match[1];
+    const body = match[2] || '';
+    const fields = {};
+    const lines = header.split(/\r?\n/);
+
+    let currentKey = null;
+    let multilineKey = null;
+    let multilineValue = [];
+
+    function saveMultiline() {
+      if (multilineKey) {
+        fields[multilineKey] = multilineValue.join('\n').trim();
+      }
+
+      multilineKey = null;
+      multilineValue = [];
+    }
+
+    lines.forEach(function (line) {
+      const fieldMatch = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+
+      if (fieldMatch) {
+        saveMultiline();
+
+        currentKey = fieldMatch[1];
+        const rawValue = fieldMatch[2].trim();
+
+        if (/^[|>][-+]?$/.test(rawValue)) {
+          multilineKey = currentKey;
+          multilineValue = [];
+          return;
+        }
+
+        let value = rawValue;
+
+        if (
+          (value.startsWith('"') && value.endsWith('"')) ||
+          (value.startsWith("'") && value.endsWith("'"))
+        ) {
+          value = value.slice(1, -1);
+        }
+
+        fields[currentKey] = value;
+        return;
+      }
+
+      if (multilineKey && /^\s+/.test(line)) {
+        multilineValue.push(line.replace(/^\s+/, ''));
+      } else if (multilineKey && line.trim() === '') {
+        multilineValue.push('');
+      }
+    });
+
+    saveMultiline();
+
+    if (!fields.body && body.trim()) {
+      fields.body = body.trim();
+    }
+
+    return fields;
+  }
+
+  function cleanMarkdown(value) {
+    return textValue(value)
+      .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/(\*\*|__)(.*?)\1/g, '$2')
+      .replace(/(\*|_)(.*?)\1/g, '$2')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/^\s*[-*+]\s+/gm, '• ')
+      .trim();
+  }
+
+  function isPublished(value) {
+    return String(value).trim().toLowerCase() === 'true';
+  }
+
+  function makeCollectionCard(type, data) {
     const card = document.createElement('article');
     card.className = 'tile';
 
+    const imagePath = textValue(data.image);
+
+    if (imagePath) {
+      const image = document.createElement('img');
+      image.src = resolveImage(imagePath);
+      image.alt = textValue(data.title) || type;
+      image.loading = 'lazy';
+
+      image.onerror = function () {
+        image.remove();
+      };
+
+      card.appendChild(image);
+    }
+
+    if (data.category) {
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = textValue(data.category);
+      card.appendChild(badge);
+    }
+
     const heading = document.createElement('h3');
-    heading.textContent = title;
+    heading.textContent = textValue(data.title) || type;
     card.appendChild(heading);
 
-    text.split(/\n\s*\n/).forEach(function (part) {
-      const paragraph = document.createElement('p');
-      paragraph.textContent = part.trim();
-      if (paragraph.textContent) {
-        card.appendChild(paragraph);
-      }
-    });
+    if (data.date) {
+      const date = document.createElement('p');
+      date.textContent = 'Date: ' + textValue(data.date);
+      card.appendChild(date);
+    }
 
-    container.appendChild(card);
+    if (data.location) {
+      const location = document.createElement('p');
+      location.textContent = 'Location: ' + textValue(data.location);
+      card.appendChild(location);
+    }
+
+    const summary = cleanMarkdown(
+      data.summary || data.description || data.body || ''
+    );
+
+    if (summary) {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = summary.length > 600
+        ? summary.slice(0, 600).trim() + '…'
+        : summary;
+
+      card.appendChild(paragraph);
+    }
+
+    return card;
   }
 
-  function setTimeline(id, value) {
-    const container = document.getElementById(id);
-    const text = getText(value);
+  async function loadCollection(folder, elementId, label) {
+    const container = document.getElementById(elementId);
 
-    if (!container || !text) return;
+    try {
+      const apiUrl =
+        'https://api.github.com/repos/' +
+        OWNER + '/' + REPO +
+        '/contents/content/' + folder +
+        '?ref=' + BRANCH;
+
+      const response = await fetch(apiUrl, {
+        headers: { 'Accept': 'application/vnd.github+json' },
+        cache: 'no-store'
+      });
+
+      if (response.status === 404) {
+        showCollectionMessage(
+          container,
+          'No published ' + label + ' yet. Add an item through Pages CMS and publish it.'
+        );
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error('Unable to retrieve ' + label);
+      }
+
+      const files = await response.json();
+
+      const markdownFiles = files.filter(function (file) {
+        return file.type === 'file' && /\.md$/i.test(file.name);
+      });
+
+      if (!markdownFiles.length) {
+        showCollectionMessage(
+          container,
+          'No ' + label + ' have been added yet. Create one in Pages CMS.'
+        );
+        return;
+      }
+
+      const results = await Promise.all(
+        markdownFiles.map(async function (file) {
+          const fileResponse = await fetch(file.download_url, {
+            cache: 'no-store'
+          });
+
+          if (!fileResponse.ok) return null;
+
+          const markdown = await fileResponse.text();
+          const item = parseFrontMatter(markdown);
+
+          item._filename = file.name;
+          return item;
+        })
+      );
+
+      const publishedItems = results
+        .filter(function (item) {
+          return item && isPublished(item.published);
+        })
+        .sort(function (a, b) {
+          return String(b.date || '').localeCompare(String(a.date || ''));
+        });
+
+      if (!publishedItems.length) {
+        showCollectionMessage(
+          container,
+          'There are no published ' + label + ' yet. Open an item in Pages CMS and enable its publish option.'
+        );
+        return;
+      }
+
+      container.replaceChildren();
+
+      publishedItems.forEach(function (item) {
+        container.appendChild(makeCollectionCard(label, item));
+      });
+
+    } catch (error) {
+      console.error('Could not load ' + label + ':', error);
+
+      showCollectionMessage(
+        container,
+        'These items could not be loaded right now. Please try again later.'
+      );
+    }
+  }
+
+  function showCollectionMessage(container, message) {
+    if (!container) return;
 
     container.replaceChildren();
 
-    text.split(/\n\s*\n/).forEach(function (part) {
-      const item = document.createElement('div');
-      item.className = 'timeline-item';
+    const paragraph = document.createElement('p');
+    paragraph.className = 'empty-message';
+    paragraph.textContent = message;
 
-      const heading = document.createElement('h3');
-      const paragraph = document.createElement('p');
-
-      const separator = part.indexOf(':');
-
-      if (separator > 0 && separator < 80) {
-        heading.textContent = part.slice(0, separator).trim();
-        paragraph.textContent = part.slice(separator + 1).trim();
-      } else {
-        heading.textContent = 'Experience and Service';
-        paragraph.textContent = part.trim();
-      }
-
-      item.appendChild(heading);
-      item.appendChild(paragraph);
-      container.appendChild(item);
-    });
+    container.appendChild(paragraph);
   }
 
-  try {
-    const response = await fetch('./content/site.json', {
-      cache: 'no-store'
-    });
+  loadWebsiteInformation();
 
-    if (!response.ok) {
-      throw new Error('Website information could not be loaded.');
-    }
+  loadCollection('events', 'events-list', 'events');
+  loadCollection('news', 'news-list', 'news updates');
+  loadCollection('blog', 'blog-list', 'blog posts');
 
-    const data = await response.json();
-
-    const name = getText(data.name);
-    const title = getText(data.title);
-    const biography = getText(data.biography);
-    const education = getText(data.education);
-    const leadership = getText(data.leadership);
-    const experience = getText(data.experience);
-    const achievements = getText(data.achievements);
-    const photo = getText(data.photo);
-    const email = getText(data.email);
-
-    if (name) {
-      document.title = name + ' | Personal Website';
-      document.getElementById('brand-name').textContent =
-        name.toUpperCase();
-
-      document.getElementById('hero-name').textContent = name;
-      document.getElementById('profile-photo').alt =
-        'Portrait of ' + name;
-    }
-
-    if (title) {
-      setText('hero-title', title);
-    }
-
-    if (biography) {
-      setParagraphs(
-        document.getElementById('biography-content'),
-        biography
-      );
-
-      setText('about-intro', biography.split(/\n\s*\n/)[0]);
-      setText('hero-intro', biography.split(/\n\s*\n/)[0]);
-    }
-
-    if (education) {
-      setCardContent(
-        'education-content',
-        'Education and Academic Background',
-        education
-      );
-
-      setText('programme', education);
-    }
-
-    if (leadership) {
-      setCardContent(
-        'leadership-content',
-        'Leadership Appointments',
-        leadership
-      );
-    }
-
-    if (experience) {
-      setTimeline('experience-content', experience);
-    }
-
-    if (achievements) {
-      setParagraphs(
-        document.getElementById('achievements-content'),
-        achievements
-      );
-    }
-
-    if (photo && /^https?:\/\//i.test(photo)) {
-      document.getElementById('profile-photo').src = photo;
-    }
-
-    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      const link = document.getElementById('contact-email');
-      link.textContent = email;
-      link.href = 'mailto:' + email;
-
-      document.getElementById('email-button').href =
-        'mailto:' + email;
-    }
-
-  } catch (error) {
-    console.warn(
-      'Using the original website information because CMS data could not be loaded.',
-      error
-    );
-  }
 })();
 </script>
 
 </body>
-          </html>
+  </html>
