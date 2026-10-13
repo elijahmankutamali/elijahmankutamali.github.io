@@ -613,6 +613,91 @@ footer {
     <p>Education · Leadership · Service</p>
   </div>
 </footer>
+<script>
+(async function () {
+  try {
+    const response = await fetch('./content/site.json');
 
+    if (!response.ok) {
+      throw new Error('Could not load website information.');
+    }
+
+    const data = await response.json();
+
+    const section = document.createElement('section');
+    section.id = 'cms-information';
+    section.style.background = '#f3f6fa';
+
+    const container = document.createElement('div');
+    container.className = 'container';
+
+    const heading = document.createElement('h2');
+    heading.textContent = 'My Updated Profile';
+    container.appendChild(heading);
+
+    const intro = document.createElement('p');
+    intro.textContent =
+      'This information is managed through my website dashboard.';
+    container.appendChild(intro);
+
+    function addField(label, value) {
+      if (!value) return;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.marginBottom = '18px';
+
+      const title = document.createElement('h3');
+      title.textContent = label;
+      card.appendChild(title);
+
+      if (label === 'Profile Photograph') {
+        const img = document.createElement('img');
+        img.src = value;
+        img.alt = data.name || 'Profile photograph';
+        img.style.maxWidth = '180px';
+        img.style.borderRadius = '12px';
+        img.style.display = 'block';
+        card.appendChild(img);
+      } else {
+        const text = document.createElement('p');
+        text.textContent = value;
+        text.style.whiteSpace = 'pre-wrap';
+        card.appendChild(text);
+      }
+
+      container.appendChild(card);
+    }
+
+    addField('Professional Name', data.name);
+    addField('Professional Title', data.title);
+    addField('Biography', data.biography);
+    addField('Education', data.education);
+    addField('Leadership Appointments', data.leadership);
+    addField('Experience', data.experience);
+    addField('Achievements', data.achievements);
+    addField('Profile Photograph', data.photo);
+
+    if (data.email) {
+      const email = document.createElement('a');
+      email.href = 'mailto:' + data.email;
+      email.textContent = data.email;
+      container.appendChild(email);
+    }
+
+    section.appendChild(container);
+
+    const home = document.getElementById('home');
+
+    if (home) {
+      home.insertAdjacentElement('afterend', section);
+    } else {
+      document.querySelector('main').appendChild(section);
+    }
+  } catch (error) {
+    console.error('Website information could not be loaded:', error);
+  }
+})();
+</script>
 </body>
 </html>
