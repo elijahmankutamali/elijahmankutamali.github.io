@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <meta name="description" content="Official personal portfolio of Elijah Mankutam Ali, educator, communicator, civil activist, student leader and Wikimedian from Ghana.">
+
 <title>Elijah Mankutam Ali | Personal Website</title>
 
 <style>
@@ -206,6 +208,7 @@ h3 {
 
 .fact span {
   color: var(--muted);
+  white-space: pre-wrap;
 }
 
 .grid {
@@ -224,6 +227,7 @@ h3 {
 
 .tile p {
   color: var(--muted);
+  white-space: pre-wrap;
 }
 
 .badge {
@@ -254,6 +258,7 @@ h3 {
 .timeline-item p {
   margin-top: 0;
   color: var(--muted);
+  white-space: pre-wrap;
 }
 
 .note {
@@ -320,7 +325,9 @@ footer {
 
 <header>
   <div class="container nav">
-    <a class="brand" href="#home">ELIJAH MANKUTAM ALI</a>
+    <a class="brand" href="#home" id="brand-name">
+      ELIJAH MANKUTAM ALI
+    </a>
 
     <nav aria-label="Main navigation">
       <a href="#home">Home</a>
@@ -328,6 +335,7 @@ footer {
       <a href="#education">Education</a>
       <a href="#leadership">Leadership</a>
       <a href="#experience">Experience</a>
+      <a href="#achievements">Achievements</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -341,13 +349,13 @@ footer {
     <div>
       <div class="eyebrow">Personal Portfolio · Ghana</div>
 
-      <h1>Elijah<br>Mankutam Ali</h1>
+      <h1 id="hero-name">Elijah<br>Mankutam Ali</h1>
 
-      <p class="roles">
+      <p class="roles" id="hero-title">
         Educator · Communicator · Civil Activist · Student Leader · Wikimedian
       </p>
 
-      <p>
+      <p id="hero-intro">
         Committed to education, youth participation, responsible leadership
         and community development. I believe in service, teamwork and
         creating opportunities for young people to contribute meaningfully
@@ -363,13 +371,16 @@ footer {
     <div>
       <img
         class="photo"
+        id="profile-photo"
         src="https://i.ibb.co/hFYRdGmT/IMG-20260718-WA0069-2.jpg"
         alt="Portrait of Elijah Mankutam Ali"
         onerror="this.style.display='none'; document.getElementById('photo-error').style.display='block';"
       >
+
       <p id="photo-error" style="display:none;text-align:center;">
         Photograph unavailable. Please check the image link.
       </p>
+
       <p class="photo-caption">Official Profile Photograph</p>
     </div>
 
@@ -382,14 +393,14 @@ footer {
     <div class="eyebrow">About Me</div>
     <h2>Service, Leadership and Lifelong Learning</h2>
 
-    <p class="section-intro">
+    <p class="section-intro" id="about-intro">
       A developing educator and youth leader committed to education,
       public service and community progress.
     </p>
 
     <div class="two-columns">
 
-      <div class="card">
+      <div class="card" id="biography-content">
         <p>
           I am Elijah Mankutam Ali, an educator, communicator, civil
           activist, student leader and Wikimedian from the North East
@@ -413,6 +424,7 @@ footer {
       </div>
 
       <div class="card">
+
         <div class="fact">
           <strong>Home Region</strong>
           <span>North East Region, Ghana</span>
@@ -420,25 +432,25 @@ footer {
 
         <div class="fact">
           <strong>Institution</strong>
-          <span>Enchi College of Education</span>
+          <span id="institution">Enchi College of Education</span>
         </div>
 
         <div class="fact">
           <strong>Programme</strong>
-          <span>B.Ed. English Language; Social Studies minor</span>
+          <span id="programme">B.Ed. English Language; Social Studies minor</span>
         </div>
 
         <div class="fact">
           <strong>Expected Graduation</strong>
-          <span>2028</span>
+          <span id="graduation">2028</span>
         </div>
 
         <div class="fact">
           <strong>Interests</strong>
           <span>Education, youth leadership, civic participation and community development</span>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 </section>
@@ -449,7 +461,7 @@ footer {
     <div class="eyebrow">Education</div>
     <h2>My Academic Journey</h2>
 
-    <div class="grid">
+    <div class="grid" id="education-content">
 
       <article class="tile">
         <h3>Enchi College of Education</h3>
@@ -490,7 +502,7 @@ footer {
       coordination, mentorship and community development.
     </p>
 
-    <div class="grid">
+    <div class="grid" id="leadership-content">
 
       <article class="tile">
         <span class="badge">Youth Model Parliament</span>
@@ -523,9 +535,9 @@ footer {
     </div>
 
     <p class="note">
-      Note: The public-service titles above refer to roles within
-      the Youth Parliament or Youth Model Parliament framework,
-      not appointments to Ghana's statutory local-government assemblies.
+      These titles refer to roles within the Youth Parliament or Youth
+      Model Parliament framework, not appointments to Ghana's statutory
+      local-government assemblies.
     </p>
 
   </div>
@@ -537,7 +549,7 @@ footer {
     <div class="eyebrow">Experience and Service</div>
     <h2>Learning Through Service</h2>
 
-    <div class="card timeline">
+    <div class="card timeline" id="experience-content">
 
       <div class="timeline-item">
         <h3>Teaching Experience</h3>
@@ -576,6 +588,19 @@ footer {
   </div>
 </section>
 
+<section id="achievements">
+  <div class="container">
+
+    <div class="eyebrow">Achievements</div>
+    <h2>Achievements and Milestones</h2>
+
+    <div class="card" id="achievements-content">
+      <p>Achievements and milestones will appear here when added through Pages CMS.</p>
+    </div>
+
+  </div>
+</section>
+
 <section id="contact">
   <div class="container">
 
@@ -589,7 +614,8 @@ footer {
 
       <p>
         Email:
-        <a href="mailto:aelijahmankutam@gmail.com">
+        <a id="contact-email"
+           href="mailto:aelijahmankutam@gmail.com">
           aelijahmankutam@gmail.com
         </a>
       </p>
@@ -597,6 +623,7 @@ footer {
       <p>North East Region, Ghana</p>
 
       <a class="button button-gold"
+         id="email-button"
          href="mailto:aelijahmankutam@gmail.com">
         Send Me an Email
       </a>
@@ -613,91 +640,211 @@ footer {
     <p>Education · Leadership · Service</p>
   </div>
 </footer>
+
 <script>
 (async function () {
+  'use strict';
+
+  function getText(value) {
+    if (value === null || value === undefined) return '';
+    if (typeof value === 'string') return value.trim();
+
+    if (Array.isArray(value)) {
+      return value.map(function (item) {
+        if (typeof item === 'string') return item;
+        if (item && typeof item === 'object') {
+          return Object.values(item).filter(Boolean).join(' — ');
+        }
+        return String(item);
+      }).filter(Boolean).join('\n\n');
+    }
+
+    if (typeof value === 'object') {
+      return Object.entries(value).map(function (entry) {
+        return entry[0] + ': ' + entry[1];
+      }).join('\n\n');
+    }
+
+    return String(value);
+  }
+
+  function setText(id, value) {
+    const element = document.getElementById(id);
+    const text = getText(value);
+
+    if (element && text) {
+      element.textContent = text;
+    }
+  }
+
+  function setParagraphs(element, value) {
+    const text = getText(value);
+
+    if (!element || !text) return;
+
+    element.replaceChildren();
+
+    text.split(/\n\s*\n/).forEach(function (part) {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = part.trim();
+      if (paragraph.textContent) {
+        element.appendChild(paragraph);
+      }
+    });
+  }
+
+  function setCardContent(id, title, value) {
+    const container = document.getElementById(id);
+    const text = getText(value);
+
+    if (!container || !text) return;
+
+    container.replaceChildren();
+
+    const card = document.createElement('article');
+    card.className = 'tile';
+
+    const heading = document.createElement('h3');
+    heading.textContent = title;
+    card.appendChild(heading);
+
+    text.split(/\n\s*\n/).forEach(function (part) {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = part.trim();
+      if (paragraph.textContent) {
+        card.appendChild(paragraph);
+      }
+    });
+
+    container.appendChild(card);
+  }
+
+  function setTimeline(id, value) {
+    const container = document.getElementById(id);
+    const text = getText(value);
+
+    if (!container || !text) return;
+
+    container.replaceChildren();
+
+    text.split(/\n\s*\n/).forEach(function (part) {
+      const item = document.createElement('div');
+      item.className = 'timeline-item';
+
+      const heading = document.createElement('h3');
+      const paragraph = document.createElement('p');
+
+      const separator = part.indexOf(':');
+
+      if (separator > 0 && separator < 80) {
+        heading.textContent = part.slice(0, separator).trim();
+        paragraph.textContent = part.slice(separator + 1).trim();
+      } else {
+        heading.textContent = 'Experience and Service';
+        paragraph.textContent = part.trim();
+      }
+
+      item.appendChild(heading);
+      item.appendChild(paragraph);
+      container.appendChild(item);
+    });
+  }
+
   try {
-    const response = await fetch('./content/site.json');
+    const response = await fetch('./content/site.json', {
+      cache: 'no-store'
+    });
 
     if (!response.ok) {
-      throw new Error('Could not load website information.');
+      throw new Error('Website information could not be loaded.');
     }
 
     const data = await response.json();
 
-    const section = document.createElement('section');
-    section.id = 'cms-information';
-    section.style.background = '#f3f6fa';
+    const name = getText(data.name);
+    const title = getText(data.title);
+    const biography = getText(data.biography);
+    const education = getText(data.education);
+    const leadership = getText(data.leadership);
+    const experience = getText(data.experience);
+    const achievements = getText(data.achievements);
+    const photo = getText(data.photo);
+    const email = getText(data.email);
 
-    const container = document.createElement('div');
-    container.className = 'container';
+    if (name) {
+      document.title = name + ' | Personal Website';
+      document.getElementById('brand-name').textContent =
+        name.toUpperCase();
 
-    const heading = document.createElement('h2');
-    heading.textContent = 'My Updated Profile';
-    container.appendChild(heading);
-
-    const intro = document.createElement('p');
-    intro.textContent =
-      'This information is managed through my website dashboard.';
-    container.appendChild(intro);
-
-    function addField(label, value) {
-      if (!value) return;
-
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.style.marginBottom = '18px';
-
-      const title = document.createElement('h3');
-      title.textContent = label;
-      card.appendChild(title);
-
-      if (label === 'Profile Photograph') {
-        const img = document.createElement('img');
-        img.src = value;
-        img.alt = data.name || 'Profile photograph';
-        img.style.maxWidth = '180px';
-        img.style.borderRadius = '12px';
-        img.style.display = 'block';
-        card.appendChild(img);
-      } else {
-        const text = document.createElement('p');
-        text.textContent = value;
-        text.style.whiteSpace = 'pre-wrap';
-        card.appendChild(text);
-      }
-
-      container.appendChild(card);
+      document.getElementById('hero-name').textContent = name;
+      document.getElementById('profile-photo').alt =
+        'Portrait of ' + name;
     }
 
-    addField('Professional Name', data.name);
-    addField('Professional Title', data.title);
-    addField('Biography', data.biography);
-    addField('Education', data.education);
-    addField('Leadership Appointments', data.leadership);
-    addField('Experience', data.experience);
-    addField('Achievements', data.achievements);
-    addField('Profile Photograph', data.photo);
-
-    if (data.email) {
-      const email = document.createElement('a');
-      email.href = 'mailto:' + data.email;
-      email.textContent = data.email;
-      container.appendChild(email);
+    if (title) {
+      setText('hero-title', title);
     }
 
-    section.appendChild(container);
+    if (biography) {
+      setParagraphs(
+        document.getElementById('biography-content'),
+        biography
+      );
 
-    const home = document.getElementById('home');
-
-    if (home) {
-      home.insertAdjacentElement('afterend', section);
-    } else {
-      document.querySelector('main').appendChild(section);
+      setText('about-intro', biography.split(/\n\s*\n/)[0]);
+      setText('hero-intro', biography.split(/\n\s*\n/)[0]);
     }
+
+    if (education) {
+      setCardContent(
+        'education-content',
+        'Education and Academic Background',
+        education
+      );
+
+      setText('programme', education);
+    }
+
+    if (leadership) {
+      setCardContent(
+        'leadership-content',
+        'Leadership Appointments',
+        leadership
+      );
+    }
+
+    if (experience) {
+      setTimeline('experience-content', experience);
+    }
+
+    if (achievements) {
+      setParagraphs(
+        document.getElementById('achievements-content'),
+        achievements
+      );
+    }
+
+    if (photo && /^https?:\/\//i.test(photo)) {
+      document.getElementById('profile-photo').src = photo;
+    }
+
+    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      const link = document.getElementById('contact-email');
+      link.textContent = email;
+      link.href = 'mailto:' + email;
+
+      document.getElementById('email-button').href =
+        'mailto:' + email;
+    }
+
   } catch (error) {
-    console.error('Website information could not be loaded:', error);
+    console.warn(
+      'Using the original website information because CMS data could not be loaded.',
+      error
+    );
   }
 })();
 </script>
+
 </body>
-</html>
+          </html>
