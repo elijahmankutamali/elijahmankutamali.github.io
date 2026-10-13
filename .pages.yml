@@ -1,0 +1,162 @@
+media:
+  input: media
+  output: /media
+
+content:
+  - name: site
+    label: Website Information
+    type: file
+    path: content/site.json
+    format: json
+    fields:
+      - name: name
+        label: Full Name
+        type: string
+
+      - name: title
+        label: Professional Title
+        type: string
+
+      - name: biography
+        label: Biography
+        type: rich-text
+
+      - name: education
+        label: Educational Background
+        type: rich-text
+
+      - name: leadership
+        label: Leadership Appointments
+        type: rich-text
+
+      - name: experience
+        label: Professional Experience
+        type: rich-text
+
+      - name: achievements
+        label: Achievements and Awards
+        type: rich-text
+
+      - name: photo
+        label: Profile Photograph
+        type: image
+
+      - name: email
+        label: Email Address
+        type: string
+
+  - name: events
+    label: Events
+    type: collection
+    path: content/events
+    filename: "{primary}.md"
+    format: yaml-frontmatter
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: Event Title
+        type: string
+        required: true
+
+      - name: date
+        label: Event Date
+        type: date
+
+      - name: location
+        label: Location
+        type: string
+
+      - name: description
+        label: Short Description
+        type: text
+
+      - name: image
+        label: Event Photograph
+        type: image
+
+      - name: body
+        label: Full Event Details
+        type: rich-text
+
+      - name: published
+        label: Publish This Event
+        type: boolean
+
+  - name: news
+    label: News and Updates
+    type: collection
+    path: content/news
+    filename: "{primary}.md"
+    format: yaml-frontmatter
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: News Headline
+        type: string
+        required: true
+
+      - name: date
+        label: Publication Date
+        type: date
+
+      - name: summary
+        label: News Summary
+        type: text
+
+      - name: image
+        label: News Photograph
+        type: image
+
+      - name: body
+        label: Full News Story
+        type: rich-text
+
+      - name: published
+        label: Publish This News
+        type: boolean
+
+  - name: blog
+    label: Personal Blog
+    type: collection
+    path: content/blog
+    filename: "{primary}.md"
+    format: yaml-frontmatter
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: Blog Post Title
+        type: string
+        required: true
+
+      - name: date
+        label: Publication Date
+        type: date
+
+      - name: category
+        label: Category
+        type: string
+
+      - name: summary
+        label: Short Introduction
+        type: text
+
+      - name: image
+        label: Cover Photograph
+        type: image
+
+      - name: body
+        label: Blog Article
+        type: rich-text
+
+      - name: published
+        label: Publish This Article
+        type: boolean
