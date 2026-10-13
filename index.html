@@ -24,6 +24,10 @@
   scroll-behavior: smooth;
 }
 
+html {
+  scroll-padding-top: 20px;
+}
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -61,6 +65,7 @@ header {
 nav {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 15px;
 }
 
@@ -72,6 +77,40 @@ nav a {
 
 nav a:hover {
   color: var(--gold);
+}
+
+/* Mobile navigation button */
+.menu-toggle {
+  display: none;
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 25px;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.menu-toggle:focus-visible,
+nav a:focus-visible,
+.brand:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+/* Pages CMS administration link */
+.admin-link {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy) !important;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.admin-link:hover {
+  opacity: 0.85;
 }
 
 .hero {
@@ -311,10 +350,48 @@ footer {
   font-size: 13px;
 }
 
+/* Mobile and tablet layout */
 @media (max-width: 760px) {
   .nav {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .brand {
+    font-size: 15px;
+    max-width: calc(100% - 60px);
+  }
+
+  .menu-toggle {
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  nav {
+    display: none;
+    width: 100%;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  nav.open {
+    display: flex;
+  }
+
+  nav a {
+    display: block;
+    padding: 10px 4px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    font-size: 15px;
+  }
+
+  nav .admin-link {
+    margin-top: 10px;
+    text-align: center;
+    border-top: none;
   }
 
   .hero-grid,
@@ -340,6 +417,14 @@ footer {
     font-size: 27px;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
 </style>
 </head>
 
@@ -347,11 +432,21 @@ footer {
 
 <header>
   <div class="container nav">
+
     <a class="brand" href="#home" id="brand-name">
       ELIJAH MANKUTAM ALI
     </a>
 
-    <nav aria-label="Main navigation">
+    <button
+      class="menu-toggle"
+      id="menu-toggle"
+      type="button"
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+      aria-controls="main-menu"
+    >☰</button>
+
+    <nav id="main-menu" aria-label="Main navigation">
       <a href="#home">Home</a>
       <a href="#about">About</a>
       <a href="#education">Education</a>
@@ -362,7 +457,15 @@ footer {
       <a href="#news">News</a>
       <a href="#blog">Personal Blog</a>
       <a href="#contact">Contact</a>
+
+      <a
+        href="https://app.pagescms.org/"
+        class="admin-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Admin / Edit Website</a>
     </nav>
+
   </div>
 </header>
 
@@ -706,6 +809,36 @@ footer {
   const REPO = 'elijahmankutamali.github.io';
   const BRANCH = 'main';
 
+  /*
+   * Mobile navigation
+   */
+  const menuButton = document.getElementById('menu-toggle');
+  const mainMenu = document.getElementById('main-menu');
+
+  if (menuButton && mainMenu) {
+    menuButton.addEventListener('click', function () {
+      const isOpen = mainMenu.classList.toggle('open');
+
+      menuButton.setAttribute('aria-expanded', String(isOpen));
+      menuButton.setAttribute(
+        'aria-label',
+        isOpen ? 'Close navigation menu' : 'Open navigation menu'
+      );
+
+      menuButton.textContent = isOpen ? '✕' : '☰';
+    });
+
+    mainMenu.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        mainMenu.classList.remove('open');
+
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.setAttribute('aria-label', 'Open navigation menu');
+        menuButton.textContent = '☰';
+      });
+    });
+  }
+
   function textValue(value) {
     if (value === null || value === undefined) return '';
 
@@ -980,22 +1113,25 @@ footer {
 
       if (experience) {
         const container = document.getElementById('experience-content');
-        container.replaceChildren();
 
-        splitExperience(experience).forEach(function (entry) {
-          const item = document.createElement('div');
-          item.className = 'timeline-item';
+        if (container) {
+          container.replaceChildren();
 
-          const heading = document.createElement('h3');
-          heading.textContent = entry.title;
+          splitExperience(experience).forEach(function (entry) {
+            const item = document.createElement('div');
+            item.className = 'timeline-item';
 
-          const paragraph = document.createElement('p');
-          paragraph.textContent = entry.description;
+            const heading = document.createElement('h3');
+            heading.textContent = entry.title;
 
-          item.appendChild(heading);
-          item.appendChild(paragraph);
-          container.appendChild(item);
-        });
+            const paragraph = document.createElement('p');
+            paragraph.textContent = entry.description;
+
+            item.appendChild(heading);
+            item.appendChild(paragraph);
+            container.appendChild(item);
+          });
+        }
       }
 
       if (achievements) {
@@ -1007,8 +1143,6 @@ footer {
 
       if (photo) {
         const image = document.getElementById('profile-photo');
-        image.src = resolveImage(photo);
-        image.style.display = 'block';
 
         image.onerror = function () {
           image.style.display = 'none';
@@ -1019,6 +1153,8 @@ footer {
           image.style.display = 'block';
           document.getElementById('photo-error').style.display = 'none';
         };
+
+        image.src = resolveImage(photo);
       }
 
       if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -1184,6 +1320,8 @@ footer {
   async function loadCollection(folder, elementId, label) {
     const container = document.getElementById(elementId);
 
+    if (!container) return;
+
     try {
       const apiUrl =
         'https://api.github.com/repos/' +
@@ -1210,6 +1348,14 @@ footer {
 
       const files = await response.json();
 
+      if (!Array.isArray(files)) {
+        showCollectionMessage(
+          container,
+          'No ' + label + ' have been added yet. Create one in Pages CMS.'
+        );
+        return;
+      }
+
       const markdownFiles = files.filter(function (file) {
         return file.type === 'file' && /\.md$/i.test(file.name);
       });
@@ -1224,17 +1370,22 @@ footer {
 
       const results = await Promise.all(
         markdownFiles.map(async function (file) {
-          const fileResponse = await fetch(file.download_url, {
-            cache: 'no-store'
-          });
+          try {
+            const fileResponse = await fetch(file.download_url, {
+              cache: 'no-store'
+            });
 
-          if (!fileResponse.ok) return null;
+            if (!fileResponse.ok) return null;
 
-          const markdown = await fileResponse.text();
-          const item = parseFrontMatter(markdown);
+            const markdown = await fileResponse.text();
+            const item = parseFrontMatter(markdown);
 
-          item._filename = file.name;
-          return item;
+            item._filename = file.name;
+            return item;
+          } catch (error) {
+            console.error('Could not load file:', file.name, error);
+            return null;
+          }
         })
       );
 
